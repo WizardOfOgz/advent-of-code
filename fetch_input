@@ -1,0 +1,20 @@
+#! /usr/bin/env ruby
+
+day = ARGV[0] || Time.now.utc.mday.to_s
+if !day || day.empty?
+  puts "Usage: fetch_input <day> <year>"
+  exit 1
+end
+
+year = ARGV[1] || Time.now.utc.year.to_s
+session_cookie = ENV["SESSION_COOKIE"]
+
+output_file = File.join(__dir__, year, "day-#{day}-input.txt")
+
+if File.exist?(output_file)
+  puts "File already exists: #{ output_file }"
+  exit 1
+end
+
+# puts %(curl https://adventofcode.com/#{year}/day/#{day}/input --cookie "session=#{session_cookie}" -o #{output_file})
+`curl https://adventofcode.com/#{year}/day/#{day}/input --cookie "session=#{session_cookie}" -o #{output_file}`
