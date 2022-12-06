@@ -14,13 +14,15 @@ stacks = [
 
 data = input.grep /\Amove/
 
-result1 = data.each do |l|
-  match_data = l.match /move (?<quantity>\d+) from (?<source>\d+) to (?<dest>\d+)/
-  quantity = match_data[:quantity].to_i
-  dest = match_data[:dest].to_i - 1
-  source = match_data[:source].to_i - 1
+data.each do |l|
+  l
+    .match(/move (?<quantity>\d+) from (?<source>\d+) to (?<dest>\d+)/)
+    .named_captures
+    .transform_keys(&:to_sym)
+    .transform_values(&:to_i) => { quantity: quantity, dest: dest, source: source }
+
   quantity.times do
-    stacks[dest].push stacks[source].pop
+    stacks[dest-1].push stacks[source-1].pop
   end
 end
 
@@ -39,21 +41,20 @@ stacks = [
   %w[R P F L W G Z],
 ]
 
-data = input.grep /\Amove/
-
 data.each do |l|
-  match_data = l.match /move (?<quantity>\d+) from (?<source>\d+) to (?<dest>\d+)/
-  quantity = match_data[:quantity].to_i
-  dest = match_data[:dest].to_i - 1
-  source = match_data[:source].to_i - 1
+  l
+    .match(/move (?<quantity>\d+) from (?<source>\d+) to (?<dest>\d+)/)
+    .named_captures
+    .transform_keys(&:to_sym)
+    .transform_values(&:to_i) => { quantity: quantity, dest: dest, source: source }
 
   s = []
   quantity.times do
-    s.unshift stacks[source].pop
+    s.unshift stacks[source-1].pop
   end
 
   quantity.times do
-    stacks[dest].push s.shift
+    stacks[dest-1].push s.shift
   end
 end
 
